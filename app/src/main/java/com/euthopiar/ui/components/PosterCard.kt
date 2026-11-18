@@ -54,6 +54,7 @@ fun PosterCard(
     val titleTopGap = CardDimensions.titleTopSpacing(scaleMode)
 
     val widthModifier = if (width != Dp.Unspecified) Modifier.width(width) else Modifier.fillMaxWidth()
+    val tvInteraction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
 
     val cleanTitle = remember(title) { sanitizeTitle(title) }
     val formattedScore = remember(rating) { formatImdbScoreValue(rating) }
@@ -74,8 +75,8 @@ fun PosterCard(
             .semantics(mergeDescendants = true) {
                 contentDescription = a11yDescription
             }
-            .pressable(onClick = onClick, onLongClick = onLongClick)
-            .tvFocusable(shape = cardShape)
+            .pressable(onClick = onClick, onLongClick = onLongClick, interactionSource = tvInteraction)
+            .tvFocusable(shape = cardShape, interactionSource = tvInteraction)
     ) {
         Box(
             modifier = Modifier
