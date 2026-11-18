@@ -578,6 +578,7 @@ private fun BoxScope.HeroHudContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Primary Button: Solid White Pill filling remaining width (48px tall, 15sp medium dark text, play icon)
+            val heroPlayInteraction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -585,6 +586,7 @@ private fun BoxScope.HeroHudContent(
                     .clip(ShapeFull)
                     .background(Color.White)
                     .pressable(
+                        interactionSource = heroPlayInteraction,
                         scaleDown = 0.96f,
                         pressedAlpha = 0.92f,
                         onClickLabel = "${actionState.label}, ${item.title}",
@@ -596,7 +598,7 @@ private fun BoxScope.HeroHudContent(
                             Modifier.focusRequester(playFocusRequester)
                         } else Modifier
                     )
-                    .tvFocusable(shape = ShapeFull)
+                    .tvFocusable(shape = ShapeFull, interactionSource = heroPlayInteraction)
                     .padding(horizontal = 20.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
