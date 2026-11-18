@@ -199,6 +199,8 @@ fun MediaCard(
         add(typeLabel)
     }.joinToString(", ")
 
+    val tvInteraction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+
     Column(
         modifier = modifier
             .width(cardWidth)
