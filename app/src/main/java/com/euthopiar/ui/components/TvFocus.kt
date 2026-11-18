@@ -56,7 +56,7 @@ fun Modifier.tvFocusable(
 
     this
         .zIndex(if (isFocused) 1f else 0f)
-        .onFocusChanged { innerFocused = it.isFocused 
+        .onFocusChanged { innerFocused = it.isFocused } 
         .then(
             if (onClick != null) {
                 Modifier.onKeyEvent { event ->
