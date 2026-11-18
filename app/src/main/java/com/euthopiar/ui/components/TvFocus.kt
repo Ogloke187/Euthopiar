@@ -33,7 +33,7 @@ import com.euthopiar.ui.theme.TextPrimary
  */
 fun Modifier.tvFocusable(
     shape: Shape = ShapeS,
-    focusedScale: Float = 1.05f,
+    focusedScale: Float = 1.12f,
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     focusedBorderColor: Color = TextPrimary
@@ -70,12 +70,12 @@ fun Modifier.tvFocusable(
             if (isFocused) {
                 Modifier
                     .shadow(
-                        elevation = 8.dp,
+                        elevation = 16.dp,
                         shape = shape,
                         spotColor = Color.White.copy(alpha = 0.35f),
                         ambientColor = Color.White.copy(alpha = 0.20f)
                     )
-                    .border(2.dp, focusedBorderColor, shape)
+                    .border(4.dp, focusedBorderColor, shape)
             } else {
                 Modifier
             }
