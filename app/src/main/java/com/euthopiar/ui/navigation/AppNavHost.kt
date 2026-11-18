@@ -470,7 +470,8 @@ fun AppNavHost(
             if (!coordinator.isActive) {
                 val isFreshInstall = lastVer.isBlank()
                 if (isFreshInstall) {
-                    coordinator.start(isFreshInstall = true)
+                    // TX12 TV: spotlight tour needs touch — never auto-start it.
+                    // coordinator.start(isFreshInstall = true)
                 } else {
                     // Existing installation updated to a newer version: do not show the walkthrough
                     preferencesRepository.setWalkthroughCompletedVersion(currentAppVersion)
