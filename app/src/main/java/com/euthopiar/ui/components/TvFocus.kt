@@ -5,6 +5,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +38,12 @@ fun Modifier.tvFocusable(
     focusedScale: Float = 1.12f,
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
-    focusedBorderColor: Color = TextPrimary
+     focusedBorderColor: Color = TextPrimary,
+    interactionSource: MutableInteractionSource? = null
 ): Modifier = composed {
-    var isFocused by remember { mutableStateOf(false) }
+    var innerFocused by remember { mutableStateOf(false) }
+    val sourceFocused = interactionSource?.collectIsFocusedAsState()?.value ?: false
+    val isFocused = innerFocused || sourceFocused
 
     val scale by animateFloatAsState(
         targetValue = if (isFocused) focusedScale else 1f,
@@ -51,7 +56,7 @@ fun Modifier.tvFocusable(
 
     this
         .zIndex(if (isFocused) 1f else 0f)
-        .onFocusChanged { isFocused = it.isFocused }
+        .onFocusChanged { innerFocused = it.isFocused 
         .then(
             if (onClick != null) {
                 Modifier.onKeyEvent { event ->
@@ -75,6 +80,7 @@ fun Modifier.tvFocusable(
                         spotColor = Color.White.copy(alpha = 0.35f),
                         ambientColor = Color.White.copy(alpha = 0.20f)
                     )
+                    .border(7.dp, Color.Black.copy(alpha = 0.85f), shape)
                     .border(4.dp, focusedBorderColor, shape)
             } else {
                 Modifier
