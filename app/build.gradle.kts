@@ -119,7 +119,8 @@ dependencies {
     implementation(libs.media3.ui)
     implementation(libs.media3.datasource.okhttp)
     implementation("org.jellyfin.media3:media3-ffmpeg-decoder:1.5.0+1")
-
+    implementation("androidx.leanback:leanback:1.0.0")
+    implementation("androidx.tvprovider:tvprovider:1.0.0")
     // Room Database
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
