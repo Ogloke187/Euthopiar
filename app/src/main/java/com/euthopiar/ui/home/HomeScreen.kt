@@ -261,11 +261,13 @@ fun HomeScreen(
         }
     }
 
+    var tvInitialFocusDone by remember { mutableStateOf(false) }
     LaunchedEffect(windowDimensions.isTV, uiState) {
-        if (windowDimensions.isTV && uiState is HomeUiState.Success) {
+        if (windowDimensions.isTV && uiState is HomeUiState.Success && !tvInitialFocusDone) {
             kotlinx.coroutines.delay(120)
             try {
                 heroPlayFocusRequester.requestFocus()
+                tvInitialFocusDone = true
             } catch (_: Exception) {}
         }
     }
