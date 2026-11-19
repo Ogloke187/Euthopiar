@@ -877,6 +877,8 @@ fun PlayerScreen(
                 onSelectDialogueBoost = { boost -> viewModel.setDialogueBoostLevel(boost) },
                 isNightModeDrcEnabled = uiState.isNightModeDrcEnabled,
                 onToggleNightModeDrc = { enabled -> viewModel.setNightModeDrc(enabled) },
+                volumeBoostDb = uiState.volumeBoostDb,
+                onVolumeBoostChange = { db -> viewModel.setVolumeBoostDb(db) },
                 selectedSleepTimer = uiState.selectedSleepTimer,
                 sleepTimerRemainingSeconds = uiState.sleepTimerRemainingSeconds,
                 onSelectSleepTimer = { opt -> viewModel.setSleepTimer(opt) },
