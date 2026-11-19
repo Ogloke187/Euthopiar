@@ -193,6 +193,7 @@ data class PlayerUiState(
     val selectedAudioTrack: AudioTrackOption = AudioTrackOption("auto", "Auto (Default)", isAuto = true),
     val dialogueBoostLevel: DialogueBoostLevel = DialogueBoostLevel.OFF,
     val isNightModeDrcEnabled: Boolean = false,
+    val volumeBoostDb: Float = 0f,
     val selectedSleepTimer: SleepTimerOption = SleepTimerOption.OFF,
     val sleepTimerRemainingSeconds: Int? = null,
     val playbackSpeed: Float = 1.0f,
@@ -5339,6 +5340,13 @@ class PlayerViewModel(
         showToast("Dialogue Boost: ${level.label}")
     }
 
+    fun setVolumeBoostDb(db: Float) {
+        val clamped = db.coerceIn(0f, 12f)
+        _uiState.update { it.copy(volumeBoostDb = clamped) }
+        applyDialogueBoost()
+        showToast(if (clamped > 0f) "Volume Boost: +${clamped.toInt()} dB" else "Volume Boost: Off")
+    }
+
     private fun applyDialogueBoost(level: DialogueBoostLevel = _uiState.value.dialogueBoostLevel) {
         val sessionId = exoPlayer?.audioSessionId ?: 0
         if (sessionId != C.AUDIO_SESSION_ID_UNSET && sessionId > 0) {
@@ -5346,7 +5354,8 @@ class PlayerViewModel(
         }
         audioDspManager.updateParameters(
             boostLevel = level,
-            nightModeDrc = _uiState.value.isNightModeDrcEnabled
+            nightModeDrc = _uiState.value.isNightModeDrcEnabled,
+            volumeBoostDb = _uiState.value.volumeBoostDb
         )
     }
 
@@ -5362,8 +5371,9 @@ class PlayerViewModel(
             audioDspManager.setAudioSessionId(sessionId)
         }
         audioDspManager.updateParameters(
-            boostLevel = _uiState.value.dialogueBoostLevel,
-            nightModeDrc = enabled
+            boostLevel = level,
+            nightModeDrc = _uiState.value.isNightModeDrcEnabled,
+            volumeBoostDb = _uiState.value.volumeBoostDb
         )
     }
 
