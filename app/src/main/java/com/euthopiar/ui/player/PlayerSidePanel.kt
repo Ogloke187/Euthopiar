@@ -332,7 +332,7 @@ fun PlayerSidePanel(
                                     dialogueBoostLevel = dialogueBoostLevel,
                                     onSelectDialogueBoost = onSelectDialogueBoost,
                                     isNightModeDrcEnabled = isNightModeDrcEnabled,
-                                    onToggleNightModeDrc = onToggleNightModeDrc
+                                    onToggleNightModeDrc = onToggleNightModeDrc,
                                     volumeBoostDb = volumeBoostDb,
                                     onVolumeBoostChange = onVolumeBoostChange
                                 )
@@ -434,7 +434,7 @@ private fun AudioOnlyTabContent(
     dialogueBoostLevel: DialogueBoostLevel,
     onSelectDialogueBoost: (DialogueBoostLevel) -> Unit,
     isNightModeDrcEnabled: Boolean,
-    onToggleNightModeDrc: (Boolean) -> Unit
+    onToggleNightModeDrc: (Boolean) -> Unit,
     volumeBoostDb: Float,
     onVolumeBoostChange: (Float) -> Unit
 ) {
