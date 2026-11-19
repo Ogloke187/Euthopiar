@@ -5336,7 +5336,7 @@ class PlayerViewModel(
 
     fun setDialogueBoostLevel(level: DialogueBoostLevel) {
         _uiState.update { it.copy(dialogueBoostLevel = level) }
-        applyDialogueBoost(level)
+        applyDialogueBoost()
         showToast("Dialogue Boost: ${level.label}")
     }
 
