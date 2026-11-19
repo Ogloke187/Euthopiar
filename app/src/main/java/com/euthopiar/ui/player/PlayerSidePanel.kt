@@ -125,6 +125,8 @@ fun PlayerSidePanel(
     onSelectDialogueBoost: (DialogueBoostLevel) -> Unit = {},
     isNightModeDrcEnabled: Boolean = false,
     onToggleNightModeDrc: (Boolean) -> Unit = {},
+    volumeBoostDb: Float = 0f,
+    onVolumeBoostChange: (Float) -> Unit = {},
     selectedSleepTimer: SleepTimerOption = SleepTimerOption.OFF,
     sleepTimerRemainingSeconds: Int? = null,
     onSelectSleepTimer: (SleepTimerOption) -> Unit = {},
@@ -331,6 +333,8 @@ fun PlayerSidePanel(
                                     onSelectDialogueBoost = onSelectDialogueBoost,
                                     isNightModeDrcEnabled = isNightModeDrcEnabled,
                                     onToggleNightModeDrc = onToggleNightModeDrc
+                                    volumeBoostDb = volumeBoostDb,
+                                    onVolumeBoostChange = onVolumeBoostChange
                                 )
                             }
                             PlayerSidePanelType.SUBTITLES -> {
@@ -391,6 +395,8 @@ fun PlayerSidePanel(
                                     onSelectDialogueBoost = onSelectDialogueBoost,
                                     isNightModeDrcEnabled = isNightModeDrcEnabled,
                                     onToggleNightModeDrc = onToggleNightModeDrc
+                                    volumeBoostDb = volumeBoostDb,
+                                    onVolumeBoostChange = onVolumeBoostChange
                                 )
                             }
                             PlayerSidePanelType.SLEEP_TIMER -> {
@@ -429,6 +435,8 @@ private fun AudioOnlyTabContent(
     onSelectDialogueBoost: (DialogueBoostLevel) -> Unit,
     isNightModeDrcEnabled: Boolean,
     onToggleNightModeDrc: (Boolean) -> Unit
+    volumeBoostDb: Float,
+    onVolumeBoostChange: (Float) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -501,6 +509,14 @@ private fun AudioOnlyTabContent(
         }
     }
 }
+
+// Volume Booster (extra gain, D-pad friendly presets)
+        item {
+            VolumeBoostControl(
+                boostDb = volumeBoostDb,
+                onSelectBoost = onVolumeBoostChange
+            )
+        }
 
 /**
  * Dedicated Subtitles Only Tab Content with generous breathing room.
@@ -1016,6 +1032,8 @@ private fun PlayerSettingsPanelContent(
     onSelectDialogueBoost: (DialogueBoostLevel) -> Unit,
     isNightModeDrcEnabled: Boolean,
     onToggleNightModeDrc: (Boolean) -> Unit
+    volumeBoostDb: Float,
+    onVolumeBoostChange: (Float) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -1214,6 +1232,13 @@ private fun PlayerSettingsPanelContent(
         }
     }
 }
+// Volume Booster (extra gain, D-pad friendly presets)
+        item {
+            VolumeBoostControl(
+                boostDb = volumeBoostDb,
+                onSelectBoost = onVolumeBoostChange
+            )
+        
 
 /**
  * Toggle Row for Side Panel settings.
@@ -1506,6 +1531,86 @@ fun ResponsiveDialogueBoostControl(
                             softWrap = false
                         )
                     }
+                }
+            }
+        }
+    }
+}
+@Composable
+fun VolumeBoostControl(
+    boostDb: Float,
+    onSelectBoost: (Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val levels = listOf(
+        0f to "Off",
+        3f to "+3 dB",
+        6f to "+6 dB",
+        9f to "+9 dB",
+        12f to "+12 dB"
+    )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Volume Booster",
+                style = PlayerTokens.RowTitle.copy(fontSize = 15.sp)
+            )
+            Text(
+                text = if (boostDb > 0f) "+${boostDb.toInt()} dB" else "Off",
+                style = PlayerTokens.RowMeta.copy(
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            )
+        }
+        Spacer(modifier = Modifier.height(3.dp))
+        Text(
+            text = "Louder than 100% — extra gain with clipping protection",
+            style = PlayerTokens.RowMeta.copy(fontSize = 12.sp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            levels.forEach { (db, label) ->
+                val isSelected = boostDb == db
+                val btnSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(44.dp)
+                        .clip(PlayerTokens.RadiusPill)
+                        .background(if (isSelected) Color.White else PlayerTokens.VideoOverlayGlassBase)
+                        .border(HairlineWidth, PlayerTokens.VideoOverlayGlassBorder, PlayerTokens.RadiusPill)
+                        .tvFocusable(shape = PlayerTokens.RadiusPill, interactionSource = btnSource)
+                        .playerPressable(
+                            isWhiteElement = isSelected,
+                            interactionSource = btnSource,
+                            onClick = { onSelectBoost(db) }
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = label,
+                        style = TextStyle(
+                            fontFamily = com.euthopiar.ui.theme.AppFontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                            color = if (isSelected) PlayerTokens.LabelDark else Color.White
+                        ),
+                        maxLines = 1,
+                        softWrap = false
+                    )
                 }
             }
         }
