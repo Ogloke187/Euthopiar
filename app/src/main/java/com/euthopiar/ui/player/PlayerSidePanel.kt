@@ -507,17 +507,15 @@ private fun AudioOnlyTabContent(
                 onCheckedChange = onToggleNightModeDrc
             )
         }
-    }
-}
-
-// Volume Booster (extra gain, D-pad friendly presets)
+        // Volume Booster (extra gain, D-pad friendly presets)
         item {
             VolumeBoostControl(
                 boostDb = volumeBoostDb,
                 onSelectBoost = onVolumeBoostChange
             )
         }
-
+    }
+}
 /**
  * Dedicated Subtitles Only Tab Content with generous breathing room.
  * Minimum row height 62dp, 20dp padding, Online Search button, and fine-tuning sync.
@@ -1230,14 +1228,15 @@ private fun PlayerSettingsPanelContent(
                 onCheckedChange = onToggleNightModeDrc
             )
         }
-    }
-}
-// Volume Booster (extra gain, D-pad friendly presets)
+        // Volume Booster (extra gain, D-pad friendly presets)
         item {
             VolumeBoostControl(
                 boostDb = volumeBoostDb,
                 onSelectBoost = onVolumeBoostChange
             )
+        }
+    }
+}
         
 
 /**
